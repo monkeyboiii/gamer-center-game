@@ -51,8 +51,8 @@ public class Game extends JFrame {
 
         // integrating with gamer center sdk
         JButton button3 = new JButton("登入");
-        button3.addActionListener(new ruleListener());
-        button3.setLocation(480, 30);
+        button3.addActionListener(new LoginListener());
+        button3.setLocation(250, 30);
         button3.setSize(256, 30);
         button3.setFont(new Font("华文行楷", 5, 30));
         button3.setBorderPainted(false);
@@ -82,7 +82,7 @@ public class Game extends JFrame {
         JLabel imgLabel = new JLabel(img);
 
 
-        getLayeredPane().add(imgLabel, new Integer(Integer.MIN_VALUE));//注意这里是关键，将背景标签添加到jfram的LayeredPane面板里。  
+        getLayeredPane().add(imgLabel, Integer.valueOf(Integer.MIN_VALUE));//注意这里是关键，将背景标签添加到jfram的LayeredPane面板里。 
         imgLabel.setBounds(0, 0, img.getIconWidth(), img.getIconHeight());//设置背景标签的位置  
         Container cp = getContentPane();
         ((Container) cp).setLayout(new BorderLayout());
@@ -140,6 +140,19 @@ public class Game extends JFrame {
         }
     }
 
+
+    static class LoginListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            SwingUtilities.invokeLater(() -> {
+                LoginFrame loginFrame = new LoginFrame();
+                loginFrame.setVisible(true);
+
+
+            });
+        }
+    }
 }
 
 

@@ -99,7 +99,7 @@ public class undoListener implements ActionListener {
                 JOptionPane.showMessageDialog(null, "已经到底啦！");
             }
 
-            String fileName = ChessGameFrame.TOTAL_STEP - 1 + ".chessmoveseq";
+            String fileName = "src/main/resources/chessmoveseq/" + (ChessGameFrame.TOTAL_STEP - 1) + ".chessmoveseq";
             FileInputStream fis = new FileInputStream(new File(fileName));
             InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
             BufferedReader br = new BufferedReader(isr);
