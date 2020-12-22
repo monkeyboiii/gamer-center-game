@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="gamer-center-developer-sdk-1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/gamer-center-developer-sdk-1.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

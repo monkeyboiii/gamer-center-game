@@ -1,4 +1,5 @@
-import model.Game;
+import model.*;
+import util.*;
 
 public class LoginTest {
 
@@ -7,7 +8,6 @@ public class LoginTest {
 
     public static void main(String[] args) throws Exception {
         DeveloperSDK sdk = new DeveloperSDK(email, password, "10.21.20.191");
-//        DeveloperSDK sdk = new DeveloperSDK(email, password,"10.21.20.234");
 
         Game game = sdk.getGameById(9L);
         System.out.println(game.getName());

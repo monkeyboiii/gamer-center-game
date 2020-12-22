@@ -1,8 +1,9 @@
 package com.sustech.gamercenter.chinesechess;
 
-import com.sustech.gamercenter.chinesechess.listener.RestartListener;
-import com.sustech.gamercenter.chinesechess.listener.ruleListener;
+import com.sustech.gamercenter.chinesechess.listener.*;
 import javazoom.jl.player.Player;
+import model.User;
+import util.DeveloperSDK;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -20,6 +21,9 @@ import java.util.Enumeration;
 public class Game extends JFrame {
     public static Game game = new Game();
 
+    public static DeveloperSDK sdk;
+    public static long user_id = -1;
+    public static long game_id = -1;
 
     public Game() {
         setTitle("中国象棋");
@@ -52,7 +56,7 @@ public class Game extends JFrame {
         // integrating with gamer center sdk
         JButton button3 = new JButton("登入");
         button3.addActionListener(new LoginListener());
-        button3.setLocation(250, 30);
+        button3.setLocation(300, 30);
         button3.setSize(256, 30);
         button3.setFont(new Font("华文行楷", 5, 30));
         button3.setBorderPainted(false);
@@ -118,7 +122,12 @@ public class Game extends JFrame {
             SwingUtilities.invokeLater(() -> {
                 // 新开游戏时直接创建新的游戏窗口，如果玩了一会返回再开始则会回到当前玩到的状态，所以在这加个判定，
                 // 让每次开始游戏都默认读一次初始的棋谱即可
-                ChessGameFrame mainFrame = new ChessGameFrame();
+                ChessGameFrame mainFrame = null;
+                try {
+                    mainFrame = new ChessGameFrame();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
 
                 mainFrame.setVisible(true);
                 RestartListener.game = game;
@@ -140,19 +149,6 @@ public class Game extends JFrame {
         }
     }
 
-
-    static class LoginListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            SwingUtilities.invokeLater(() -> {
-                LoginFrame loginFrame = new LoginFrame();
-                loginFrame.setVisible(true);
-
-
-            });
-        }
-    }
 }
 
 

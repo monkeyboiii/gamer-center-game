@@ -1,16 +1,14 @@
 package com.sustech.gamercenter.chinesechess.listener;
 
 import com.sustech.gamercenter.chinesechess.ChessGameFrame;
+import com.sustech.gamercenter.chinesechess.Game;
 import com.sustech.gamercenter.chinesechess.chess.*;
 import com.sustech.gamercenter.chinesechess.chessboard.ChessboardComponent;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class SaveClickListener implements ActionListener {//                   存档
@@ -24,26 +22,42 @@ public class SaveClickListener implements ActionListener {//                   �
 
         else try {
 
-            FileOutputStream fos = new FileOutputStream(new File(str1+".com.sustech.gamercenter.chinesechess.chessboard"));
-            OutputStreamWriter osr = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            BufferedWriter output = new BufferedWriter(osr);
+//            FileOutputStream fos = new FileOutputStream(new File(str1+".com.sustech.gamercenter.chinesechess.chessboard"));
+//            OutputStreamWriter osr = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+//            BufferedWriter output = new BufferedWriter(osr);
+
             ChessComponent[][] chessComponents = chessboard.getChessboard();
             String lastMover = "";
             if (chessboard.getCurrentColor() == ChessColor.BLACK) lastMover = "RED";
             if (chessboard.getCurrentColor() == ChessColor.RED) lastMover = "BLACK";
             lastMover = String.format("@LAST_MOVER=%s\n", lastMover);
-            output.write(lastMover + "@@\n\n");
+
+            StringBuilder result = new StringBuilder(lastMover + "@@\n\n");
             for (int i = 0; i < 10; i++) {
                 if (i == 5)
-                    output.write("---------\n");
+                    result.append("---------\n");
                 for (int j = 0; j < 9; j++) {
-                    output.write(getName(chessComponents[i][j]));
+                    result.append(getName(chessComponents[i][j]));
                 }
-                output.write("\n");
+                result.append("\n");
             }
-            output.flush();
-            output.close();
-            JOptionPane.showMessageDialog(null, "名为 "+str1+".com.sustech.gamercenter.chinesechess.chessboard 的棋盘已成功保存!");
+
+//            output.write(lastMover + "@@\n\n");
+//            for (int i = 0; i < 10; i++) {
+//                if (i == 5)
+//                    output.write("---------\n");
+//                for (int j = 0; j < 9; j++) {
+//                    output.write(getName(chessComponents[i][j]));
+//                }
+//                output.write("\n");
+//            }
+//            output.flush();
+//            output.close();
+
+            InputStream inputStream = new ByteArrayInputStream(result.toString().getBytes());
+            Game.sdk.cloudUpload(Game.game_id, Game.user_id, inputStream, str1.trim() + ".chessboard");
+
+            JOptionPane.showMessageDialog(null, "名为 "+str1+".chessboard 的棋盘已成功保存!");
 
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -1,6 +1,7 @@
 package com.sustech.gamercenter.chinesechess.listener;
 
 import com.sustech.gamercenter.chinesechess.ChessGameFrame;
+import com.sustech.gamercenter.chinesechess.Game;
 import com.sustech.gamercenter.chinesechess.WinnerFrame;
 import com.sustech.gamercenter.chinesechess.chess.*;
 import com.sustech.gamercenter.chinesechess.chessboard.ChessboardComponent;
@@ -12,36 +13,39 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class LoadFileListener implements ActionListener {//                   读档
     ChessboardComponent chessboard = ChessGameFrame.chessboard;
-    model.Game game = ChessGameFrame.game;
-    model.User user = ChessGameFrame.user;
-    DeveloperSDK sdk = ChessGameFrame.sdk;
     @Override
     public void actionPerformed(ActionEvent e){
-//        for(int i=0;i<10;i++){
-//            for(int j=0;j<9;j++){
-//                com.sustech.gamercenter.chinesechess.chessboard.getChessboard()
-//            }
-//        }
-        chessboard.initChessBoard();
-        String str1 = JOptionPane.showInputDialog("你的棋局的名字是什么？（后缀.chessboard不要加）");
 
-//        File file = new File("src/main/resources/chessboard/" + str1.trim() + ".chessboard");
+        if (Game.game_id == -1 || Game.user_id == -1){
+            JOptionPane.showMessageDialog(null, "请先登录!");
+            return;
+        }
+
+        List<String> records = null;
+        try {
+            records = Game.sdk.cloudList(Game.game_id, Game.user_id);
+            StringBuilder result = new StringBuilder();
+            for (String record : records)
+                if (record.endsWith(".chessboard"))
+                    result.append(record).append("\r\n");
+            JOptionPane.showMessageDialog(null, result.toString());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        ChessGameFrame.chessmove = new StringBuffer();
+        String str1 = JOptionPane.showInputDialog("你的棋谱的名字是什么？（后缀.chessboard不要加）");
 
         if (str1 == null || str1.equals(""))
             JOptionPane.showMessageDialog(null, "名字不能为空!");
-//        else if (!file.exists())
-//            JOptionPane.showMessageDialog(null, "名为 " + str1 + ".chessmoveseq 棋局不存在!");
         else
             try {
-//                FileInputStream fis = new FileInputStream(file);
-//                InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
-
+                chessboard.initChessBoard();
                 InputStreamReader isr = new InputStreamReader(
-                        ChessGameFrame.sdk.cloudDownload(ChessGameFrame.game.getId(),
-                                ChessGameFrame.user.getId(), str1.trim() + ".chessboard")
+                        Game.sdk.cloudDownload(Game.game_id, Game.user_id, str1.trim() + ".chessboard")
                 );
                 BufferedReader br = new BufferedReader(isr);
                 boolean EndAnnotation = false;
@@ -179,9 +183,11 @@ public class LoadFileListener implements ActionListener {//                   �
 
 
                 chessboard.repaint();
-                JOptionPane.showMessageDialog(null, "名为 " + str1 + ".com.sustech.gamercenter.chinesechess.chessboard 的棋盘已成功读入!");
+                JOptionPane.showMessageDialog(null, "名为 " + str1 + ".chessboard 的棋盘已成功读入!");
 
             } catch (Exception ex) {
+                System.out.println("载入失败！");
+                JOptionPane.showMessageDialog(null, "载入失败!");
                 ex.printStackTrace();
             }
         try {

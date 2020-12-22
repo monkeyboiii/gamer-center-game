@@ -12,8 +12,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Enumeration;
-import model.*;
-import util.*;
 
 public class ChessGameFrame extends JFrame {
     public static ChessboardComponent chessboard = new ChessboardComponent(512, 512);
@@ -22,30 +20,24 @@ public class ChessGameFrame extends JFrame {
     public static JButton button8;
     public static int currentRed = 16;
     public static int currentBlack = 16;
-    public static DeveloperSDK sdk;
-    public static User user;
-    public static model.Game game;
+
+    public static InputStream background;
 
     static {
         try {
-            sdk = new DeveloperSDK("calvin@gmail.com", "calvin123", "10.21.128.97");
-            game = sdk.getGameByName("chinese%20chess");
-            user = sdk.login("charlie@foxmail.com", "charlie123");
-            System.out.println(game.getId());
-            System.out.println(user.getId());
-        } catch (Exception e){
+            background = new FileInputStream(new File("src/main/resources/image/chessboard.jpg"));
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
-    public ChessGameFrame() {
+    public ChessGameFrame() throws Exception {
         InitGlobalFont(new Font("楷体", Font.PLAIN, 24));
 //        setBackground(ChessComponent.CHESS_COLOR);
 
         // background image
         // 将背景图放在标签里
-        ImageIcon img = new ImageIcon("src/main/resources/image/chessboard.jpg");
+        ImageIcon img = new ImageIcon(background.readAllBytes());
         JLabel imgLabel = new JLabel(img);
         setBackground(ChessComponent.CHESS_COLOR);
 
@@ -163,7 +155,7 @@ public class ChessGameFrame extends JFrame {
 //        button3.setLocation(600, 140);
 //        button3.setSize(120, 70);
         button3.setBounds(600, 120, 300, 60);
-        button3.addActionListener(new saveManualListener());
+        button3.addActionListener(new SaveManualListener());
         add(button3);
         button3.setBorderPainted(false);
         button3.setBackground(Color.white);
@@ -404,7 +396,12 @@ public class ChessGameFrame extends JFrame {
     public static void main(String[] args) throws FileNotFoundException, JavaLayerException {
         InitGlobalFont(new Font("楷体", Font.PLAIN, 24));
         SwingUtilities.invokeLater(() -> {
-            ChessGameFrame mainFrame = new ChessGameFrame();
+            ChessGameFrame mainFrame = null;
+            try {
+                mainFrame = new ChessGameFrame();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             mainFrame.setVisible(true);
 
