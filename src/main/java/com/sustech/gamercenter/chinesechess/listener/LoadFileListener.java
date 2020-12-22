@@ -5,6 +5,7 @@ import com.sustech.gamercenter.chinesechess.WinnerFrame;
 import com.sustech.gamercenter.chinesechess.chess.*;
 import com.sustech.gamercenter.chinesechess.chessboard.ChessboardComponent;
 import javazoom.jl.player.Player;
+import util.DeveloperSDK;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -14,9 +15,11 @@ import java.nio.charset.StandardCharsets;
 
 public class LoadFileListener implements ActionListener {//                   读档
     ChessboardComponent chessboard = ChessGameFrame.chessboard;
-
+    model.Game game = ChessGameFrame.game;
+    model.User user = ChessGameFrame.user;
+    DeveloperSDK sdk = ChessGameFrame.sdk;
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e){
 //        for(int i=0;i<10;i++){
 //            for(int j=0;j<9;j++){
 //                com.sustech.gamercenter.chinesechess.chessboard.getChessboard()
@@ -24,14 +27,22 @@ public class LoadFileListener implements ActionListener {//                   �
 //        }
         chessboard.initChessBoard();
         String str1 = JOptionPane.showInputDialog("你的棋局的名字是什么？（后缀.chessboard不要加）");
-        File file = new File(str1 + ".com.sustech.gamercenter.chinesechess.chessboard");
-        if (!file.exists()) {
-            JOptionPane.showMessageDialog(null, "名为 " + str1 + ".chessmoveseq 棋局不存在!");
-        } else if (str1 == null || str1.equals(""))
+
+//        File file = new File("src/main/resources/chessboard/" + str1.trim() + ".chessboard");
+
+        if (str1 == null || str1.equals(""))
             JOptionPane.showMessageDialog(null, "名字不能为空!");
-        else try {
-                FileInputStream fis = new FileInputStream(new File(str1 + ".com.sustech.gamercenter.chinesechess.chessboard"));
-                InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+//        else if (!file.exists())
+//            JOptionPane.showMessageDialog(null, "名为 " + str1 + ".chessmoveseq 棋局不存在!");
+        else
+            try {
+//                FileInputStream fis = new FileInputStream(file);
+//                InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+
+                InputStreamReader isr = new InputStreamReader(
+                        ChessGameFrame.sdk.cloudDownload(ChessGameFrame.game.getId(),
+                                ChessGameFrame.user.getId(), str1.trim() + ".chessboard")
+                );
                 BufferedReader br = new BufferedReader(isr);
                 boolean EndAnnotation = false;
                 int row = 0;

@@ -23,13 +23,13 @@ public class LoadManualListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         ChessGameFrame.chessmove = new StringBuffer();
         String str1 = JOptionPane.showInputDialog("你的棋谱的名字是什么？（后缀.chessmoveseq不要加）");
-        File file = new File("src/main/resources/chessmoveseq/" + str1.trim() + ".chessmoveseq");
 
-        if (!file.exists()) {
-            JOptionPane.showMessageDialog(null, "名为 " + str1 + ".chessmoveseq 棋谱不存在!");
-        } else if (str1 == null || str1.equals(""))
+//        File file = new File("src/main/resources/chessmoveseq/" + str1.trim() + ".chessmoveseq");
+
+        if (str1 == null || str1.equals(""))
             JOptionPane.showMessageDialog(null, "名字不能为空!");
-
+//        else if (!file.exists())
+//            JOptionPane.showMessageDialog(null, "名为 " + str1 + ".chessmoveseq 棋谱不存在!");
         else try {
 
 
@@ -39,8 +39,13 @@ public class LoadManualListener implements ActionListener {
                 if (chessboard.getCurrentColor() == ChessColor.RED) {
                     chessboard.swapColor();
                 }
-                FileInputStream fis = new FileInputStream(new File("src/main/resources/chessmoveseq/" + str1.trim() + ".chessmoveseq"));
-                InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+
+//                FileInputStream fis = new FileInputStream(new File("src/main/resources/chessmoveseq/" + str1.trim() + ".chessmoveseq"));
+//                InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+            InputStreamReader isr = new InputStreamReader(
+                    ChessGameFrame.sdk.cloudDownload(ChessGameFrame.game.getId(),
+                            ChessGameFrame.user.getId(), str1.trim() + ".chessmoveseq")
+            );
                 BufferedReader br = new BufferedReader(isr);
 
                 boolean EndAnnotation = false;

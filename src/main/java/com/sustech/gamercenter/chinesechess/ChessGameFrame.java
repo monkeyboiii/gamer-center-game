@@ -5,7 +5,6 @@ import com.sustech.gamercenter.chinesechess.chessboard.ChessboardComponent;
 import com.sustech.gamercenter.chinesechess.listener.*;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -13,7 +12,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Enumeration;
-
+import model.*;
+import util.*;
 
 public class ChessGameFrame extends JFrame {
     public static ChessboardComponent chessboard = new ChessboardComponent(512, 512);
@@ -22,6 +22,22 @@ public class ChessGameFrame extends JFrame {
     public static JButton button8;
     public static int currentRed = 16;
     public static int currentBlack = 16;
+    public static DeveloperSDK sdk;
+    public static User user;
+    public static model.Game game;
+
+    static {
+        try {
+            sdk = new DeveloperSDK("calvin@gmail.com", "calvin123", "10.21.128.97");
+            game = sdk.getGameByName("chinese%20chess");
+            user = sdk.login("charlie@foxmail.com", "charlie123");
+            System.out.println(game.getId());
+            System.out.println(user.getId());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
 
     public ChessGameFrame() {
         InitGlobalFont(new Font("楷体", Font.PLAIN, 24));
@@ -333,7 +349,7 @@ public class ChessGameFrame extends JFrame {
         button10.setBorderPainted(false);
         button10.setBackground(Color.white);
         button10.setContentAreaFilled(false);
-        button10.addActionListener(new touxiang());
+        button10.addActionListener(new surrender());
 
         add(button10);
 
