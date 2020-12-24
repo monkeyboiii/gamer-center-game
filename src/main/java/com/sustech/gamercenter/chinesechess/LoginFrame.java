@@ -51,7 +51,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Game.sdk = new DeveloperSDK("calvin@gmail.com", "calvin123", "10.21.20.191");
+        Game.sdk = new DeveloperSDK("11813010@mail.sustech.edu.cn", "james123", "47.115.50.249");
         this.setVisible(true);
     }
 
@@ -59,8 +59,8 @@ public class LoginFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == login) {
             try{
-                Game.game_id = Game.sdk.getGameByName("chinese chess").getId();
-                Game.user_id = Game.sdk.login(email.getText(), String.valueOf(pwd.getPassword())).getId();
+                Game.game_id = Game.sdk.getGameByName("中国象棋").getId();
+                Game.user_id = Game.sdk.login(email.getText(), String.valueOf(pwd.getPassword()), Game.game_id).getId();
                 System.out.println(Game.game_id);
                 System.out.println(Game.user_id);
 
